@@ -21,6 +21,21 @@ sudo sed -ri 's/.*swap.*/#&/' /etc/fstab
 ```bash
 sudo ufw disable
 ```
+* 修改内核配置
+```bash
+$ sudo bash -c "cat > /etc/modules-load.d/containerd.conf" <<EOF
+overlay
+br_netfilter
+EOF
+$ sudo modprobe overlay
+$ sudo modprobe br_netfilter
+$ sudo bash -c "cat > /etc/sysctl.d/k8s.conf" <<EOF
+bridge-nf-call-ip6tables = 1
+bridge.bridge-nf-call-iptables = 1
+net.ipv4.ip_forward = 1
+EOF
+$ sudo sysctl --system
+```
 ## 4. 安装docker
 * 基础安装
 ```bash
@@ -41,7 +56,7 @@ $ sudo apt-get install docker-ce docker-ce-cli containerd.io
 ```
 * 配置docker
 ```bash
-sudo cat > /etc/docker/daemon.json <<EOF
+sudo bash -c "cat > /etc/docker/daemon.json" <<EOF
 {
   "exec-opts": ["native.cgroupdriver=systemd"],
   "log-driver": "json-file",
