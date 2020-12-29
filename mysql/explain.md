@@ -15,5 +15,6 @@
 12. Extra //包含不适合在其它列中显示但十分重要的额外信息
 ```
 # 图解
+![Image text](https://raw.githubusercontent.com/dxhbiz/blog/master/mysql/images/explain.png)
 
 
